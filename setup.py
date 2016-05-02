@@ -8,7 +8,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0',
+    version='1.1',
 
     description='Projeto que contém rotinas uteis para os serviços do projeto Sigeflex',
     # long_description=long_description,
