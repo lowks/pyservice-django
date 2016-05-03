@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyutil',
-    version='1.2',
+    version='1.3',
     url='https://github.com/bittecnologia/pyutil',
     author='Rodrigo Rodrigues',
     author_email='rodrigorodriguescosta@gmail.com',
