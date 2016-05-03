@@ -1,4 +1,4 @@
 include AUTHORS CHANGES README INSTALL LICENCE
-recursive-include geoportal *.py
+recursive-include *.py
 include docs/Makefile
 recursive-include docs/source
