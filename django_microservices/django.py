@@ -8,6 +8,16 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
 
+class DjService:
+    urls = {}
+    def add_route(self, url, method):
+        self.urls[url] = method
+
+    def processa_django_request(self, request):
+        path = request.path.split('/')
+        action = path[1]
+        action = self.urls[action]
+        return processa_django_request(request, action)
 
 def del_none(d):
     if isinstance(d, dict):
