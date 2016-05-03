@@ -1,4 +1,4 @@
-from service_util import django
+from . import django
 
 
 def processa_django_request(request, action):

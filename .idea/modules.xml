@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../service_util/.idea/pyutil.iml" filepath="$PROJECT_DIR$/../service_util/.idea/pyutil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../django_microservices/.idea/django_microservices.iml" filepath="$PROJECT_DIR$/../django_microservices/.idea/django_microservices.iml" />
     </modules>
   </component>
 </project>

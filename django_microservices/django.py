@@ -4,9 +4,9 @@ from datetime import date
 from decimal import Decimal
 
 import copy
-from service_util.django import HttpResponse
-from service_util.django import QuerySet
-from service_util.django import models
+from django.db import models
+from django.db.models.query import QuerySet
+from django.http.response import HttpResponse
 
 
 def del_none(d):
