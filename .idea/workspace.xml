@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4223b144-9f0b-4e8b-bf8c-38afbb2d6b19" name="Default" comment="Primeiro commit">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../django_microservices/.idea/django_microservices.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../django_microservices/virtualenv/lib/python3.4/no-global-site-packages.txt" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/../django_microservices/.idea/pyutil.iml" afterPath="$PROJECT_DIR$/../django_microservices/.idea/django-microservices.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../django_microservices/.idea/misc.xml" afterPath="$PROJECT_DIR$/../django_microservices/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../django_microservices/.idea/modules.xml" afterPath="$PROJECT_DIR$/../django_microservices/.idea/modules.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../django_microservices/virtualenv/lib/python3.4/site-packages/django/conf/app_template/__init__.py-tpl" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../django_microservices/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../django_microservices/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/../django_microservices/service_util/django.py" afterPath="$PROJECT_DIR$/../django_microservices/django_microservices/django.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/../django_microservices/service_util/util.py" afterPath="$PROJECT_DIR$/../django_microservices/django_microservices/__init__.py" />
     </list>
     <list id="e9ae6476-e850-48c6-83b7-4be6a07d5118" name="removido  virtualenv" comment="" />
     <ignored path="pyutil.iws" />
@@ -55,8 +49,8 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../django_microservices/django_microservices/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="20" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -186,7 +180,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../sigeflex_api/src" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="ignore_missing_gitignore" value="true" />
@@ -533,14 +527,21 @@
       <option name="project" value="LOCAL" />
       <updated>1462284737377</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Primeiro commit">
+      <created>1462285643625</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1462285643626</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1053" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2550586" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2550586" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -658,8 +659,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../django_microservices/django_microservices/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="20" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
           <folding />
         </state>
       </provider>
