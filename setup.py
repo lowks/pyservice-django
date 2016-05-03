@@ -10,7 +10,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version='1.1',
 
-    description='Projeto que contém rotinas uteis para os serviços do projeto Sigeflex',
+    description='Projeto que contem rotinas uteis para os servicos do projeto Sigeflex',
     # long_description=long_description,
 
     # The project's main homepage.
@@ -50,7 +50,6 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='util',
     include_package_data=True,
 
     # You can just specify the packages manually here if your project is
@@ -59,7 +58,7 @@ setup(
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
-    py_modules=["pyutil"],
+    # py_modules=["pyutil"],
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
