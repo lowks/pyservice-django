@@ -1,14 +1,12 @@
 import datetime
 import json
-
 from datetime import date
 from decimal import Decimal
 
 import copy
-
-from django.db import models
-from django.db.models import QuerySet
-from django.http import HttpResponse
+from pyutil.django import HttpResponse
+from pyutil.django import QuerySet
+from pyutil.django import models
 
 
 def del_none(d):

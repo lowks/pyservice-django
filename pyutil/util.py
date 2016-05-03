@@ -1,4 +1,4 @@
-import django
+from pyutil import django
 
 
 def processa_django_request(request, action):
