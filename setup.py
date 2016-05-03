@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyutil',
-    version='1.0.0',
-    url='https://github.com/bittecnologia/pyutil',
+    version='1.0.1',
+    url='https://github.com/bittecnologia/django-microservices',
     author='Rodrigo Rodrigues',
     author_email='rodrigorodriguescosta@gmail.com',
     license='MIT',
