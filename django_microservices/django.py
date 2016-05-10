@@ -8,16 +8,83 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
 
+
 class DjService:
     urls = {}
+    service_name = 'Service Sample'
+    service_description = ''
+    service_version = '1.0'
+
     def add_route(self, url, method):
         self.urls[url] = method
+
+    def get_service_info(self):
+        return {
+            'Service Name' : self.service_name,
+            'Description' : self.service_description,
+            'Version' : self.service_version,
+        }
 
     def processa_django_request(self, request):
         path = request.path.split('/')
         action = path[1]
         action = self.urls[action]
+        if not action:
+            action = self.get_service_info
+
         return processa_django_request(request, action)
+
+
+def processa_django_request(request, action):
+    # PROCESSA OS PARAMETROS
+    params = []
+    if request.method == 'POST':
+        params = request.body.decode()
+        params = Serializer.json_to_object(params)
+
+    if params != None and not len(params):
+        params = []
+
+    if not isinstance(params, list):
+        params = [params]
+
+    # Retorno
+    result = {"result": "OK",
+              "data": ""}
+    try:
+        result['data'] = action(*params)
+        result = Serializer.object_to_json(result)
+
+        response = HttpResponse()
+        response.status_code = 200
+        response.write(result)
+
+        return response
+    except Exception as e:
+        result['result'] = 'ERRO'
+        result['data'] = {}
+        if not hasattr(e, 'code'):
+            e.code = ''
+
+        if not hasattr(e, 'message'):
+            e.message = str(e)
+
+        message_detail2 = ''
+        if hasattr(e, 'message_detail'):
+            message_detail2 = e.message_detail2
+
+        if 'positional arguments but' in e.message \
+                or 'must be a sequence, not NoneType' in e.message \
+                or 'positional argument' in e.message:
+            e.message = 'Number of parameters incorrect'
+
+        result['data']['code'] = e.code
+        result['data']['message'] = e.message
+        # message_detail = format_exception(e)
+        # result['data']['message_detail'] = message_detail
+        result['data']['message_detail2'] = message_detail2
+        return result
+
 
 def del_none(d):
     if isinstance(d, dict):
@@ -131,57 +198,3 @@ def toObj(jsonString):
         return obj
     except Exception as e:
         raise (e)
-
-
-
-def processa_django_request(request, action):
-
-
-    # PROCESSA OS PARAMETROS
-    params = []
-    if request.method == 'POST':
-        params = request.body.decode()
-        params = Serializer.json_to_object(params)
-
-    if params != None and not len(params):
-        params = []
-
-    if not isinstance(params, list):
-        params = [params]
-
-    # Retorno
-    result = {"result": "OK",
-              "data": ""}
-    try:
-        result['data'] = action(*params)
-        result = Serializer.object_to_json(result)
-
-        response = HttpResponse()
-        response.status_code = 200
-        response.write(result)
-
-        return response
-    except Exception as e:
-        result['result'] = 'ERRO'
-        result['data'] = {}
-        if not hasattr(e, 'code'):
-            e.code = ''
-
-        if not hasattr(e, 'message'):
-            e.message = str(e)
-
-        message_detail2 = ''
-        if hasattr(e, 'message_detail'):
-            message_detail2 = e.message_detail2
-
-        if 'positional arguments but' in e.message \
-                or 'must be a sequence, not NoneType' in e.message \
-                or 'positional argument' in e.message:
-            e.message = 'Number of parameters incorrect'
-
-        result['data']['code'] = e.code
-        result['data']['message'] = e.message
-        # message_detail = format_exception(e)
-        # result['data']['message_detail'] = message_detail
-        result['data']['message_detail2'] = message_detail2
-        return result
