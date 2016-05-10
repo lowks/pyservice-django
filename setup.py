@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django_microservices',
-    version='1.0.2',
+    version='1.0.3',
     url='https://github.com/bittecnologia/django-microservices',
     author='Rodrigo Rodrigues',
     author_email='rodrigorodriguescosta@gmail.com',
