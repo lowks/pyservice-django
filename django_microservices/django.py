@@ -28,7 +28,8 @@ class DjService:
     def processa_django_request(self, request):
         path = request.path.split('/')
         action = path[1]
-        action = self.urls[action]
+        action = self.urls.get(action, None)
+
         if not action:
             action = self.get_service_info
 
