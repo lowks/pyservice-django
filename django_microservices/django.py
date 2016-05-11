@@ -39,6 +39,8 @@ class DjService:
 def processa_django_request(request, action):
     # PROCESSA OS PARAMETROS
     params = []
+    logger = logging.getLogger(__name__)
+
     if request.method == 'POST':
         params = request.body.decode()
         params = Serializer.json_to_object(params)
@@ -84,6 +86,7 @@ def processa_django_request(request, action):
         # message_detail = format_exception(e)
         # result['data']['message_detail'] = message_detail
         result['data']['message_detail2'] = message_detail2
+        logger.error(e.message)
         return result
 
 
