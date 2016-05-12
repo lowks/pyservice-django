@@ -5,6 +5,11 @@ from datetime import date
 from decimal import Decimal
 
 import copy
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
+from django.core import mail
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
@@ -21,9 +26,9 @@ class DjService:
 
     def get_service_info(self):
         return {
-            'Service Name' : self.service_name,
-            'Description' : self.service_description,
-            'Version' : self.service_version,
+            'Service Name': self.service_name,
+            'Description': self.service_description,
+            'Version': self.service_version,
         }
 
     def processa_django_request(self, request):
@@ -35,6 +40,96 @@ class DjService:
             action = self.get_service_info
 
         return processa_django_request(request, action)
+
+    def config_classes(self, classes=[], methods=[]):
+
+        if not methods:
+            methods = [save, delete, list]
+
+        for classe in classes:
+            for method in methods:
+                setattr(classe, method.__name__, method)
+
+
+def save(self, data=None):
+    if data:
+        self.__dict__ = data
+
+    try:
+        self.full_clean()
+
+    except ValidationError as e:
+        message = e.message_dict
+        raise Exception('FIELDS_VALIDATION', message)
+
+    super(self.__class__, self).save()
+    return self
+
+
+def delete(classe, ids):
+    objs = classe.objects.filter(id__in=[ids])
+    deleted_records = objs.delete()
+    return 'Excluido {0} registros'.format(deleted_records)
+
+
+def toDjangoFilter(self, filter):
+    queryFilter = {}
+    # Filtro
+    for where in filter.get('where', []):
+
+        field = where.get('field', '')
+        value = where.get('value', '')
+        condition = ''
+        where = []
+        # veja se tem asterisco na consulta
+        if isinstance(value, str):
+            if '*' in value:
+                values = value.split('*')
+                for v in values:
+                    if v:
+                        condition = '__contains'
+                        value = v
+            else:
+                condition = '__startswith'
+
+        queryFilter[field + condition] = value
+
+    query = self.__class__.objects.filter(**queryFilter)
+
+    if filter.get('select', []):
+        query = query.values(*filter.get('select', []))
+    elif self.FIELDS:
+        query = query.values(*self.FIELDS)
+
+    query = query.distinct()
+    return query
+
+
+def list(classe, filter=None):
+    if filter:
+        if isinstance(filter, dict):
+            return toDjangoFilter(filter)
+            # return self.__class__.objects.filter(**filter).all()
+
+    return classe.objects.filter(**filter).all()
+
+def send_mail(subject='', body='', from_email=None, to=None, bcc=None,
+                  connection=None, attachments=None, headers=None, cc=None,
+                  reply_to=None, html=True):
+
+    if not isinstance(to, (list, tuple)):
+        email_to = [to]
+
+    conn = mail.get_connection()
+    msg = mail.EmailMessage(subject, body, from_email, to,
+                            connection=conn)
+    if html:
+        msg.content_subtype = "html"
+
+    try:
+        msg.send()
+    except Exception as e:
+        raise Exception(e)
 
 
 def processa_django_request(request, action):
@@ -56,8 +151,14 @@ def processa_django_request(request, action):
     result = {"result": "OK",
               "data": ""}
     try:
-        result['data'] = action(*params)
-        result = Serializer.object_to_json(result)
+
+        # if the action is an str which it means that need to make post request
+        if isinstance(action, str):
+            request = Request(action, urlencode(params).encode())
+            result['data'] = urlopen(request).read().decode()
+        else:
+            result['data'] = action(*params)
+            result = Serializer.object_to_json(result)
 
         response = HttpResponse()
         response.status_code = 200
