@@ -2,9 +2,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='pyrest-django',
-    version='1.0.9',
-    url='https://github.com/bittecnologia/django-microservices',
+    name='pyservice-django',
+    version='1.1.14',
+    url='https://github.com/bittecnologia/pyservice-django',
     author='Rodrigo Rodrigues',
     author_email='rodrigorodriguescosta@gmail.com',
     license='MIT',

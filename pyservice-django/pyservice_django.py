@@ -14,41 +14,45 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
 
+urls = {}
+service_name = 'Service Sample'
+service_description = ''
+service_version = '1.0'
 
-class DjService:
-    urls = {}
-    service_name = 'Service Sample'
-    service_description = ''
-    service_version = '1.0'
+services = {}
 
-    def add_route(self, url, method):
-        self.urls[url] = method
+def add_route(self, url, method):
+    urls[url] = method
 
-    def get_service_info(self):
-        return {
-            'Service Name': self.service_name,
-            'Description': self.service_description,
-            'Version': self.service_version,
-        }
+def add_service(service_name, url):
+    services[service_name] = url
 
-    def processa_django_request(self, request):
-        path = request.path.split('/')
-        action = path[1]
-        action = self.urls.get(action, None)
+def get_service_info(self):
+    return {
+        'Service Name': self.service_name,
+        'Description': self.service_description,
+        'Version': self.service_version,
+    }
 
-        if not action:
-            action = self.get_service_info
 
-        return processa_django_request(request, action)
+def POST(service_name, action, params):
+    pass
 
-    def config_classes(self, classes=[], methods=[]):
 
-        if not methods:
-            methods = [save, delete, list]
+def config_classes(self, classes=[], methods=[]):
+    """
+    This method injects basic functions for djgando model or others functions passed by params
+    :param self:
+    :param classes:
+    :param methods:
+    :return:
+    """
+    if not methods:
+        methods = [save, delete, list]
 
-        for classe in classes:
-            for method in methods:
-                setattr(classe, method.__name__, method)
+    for classe in classes:
+        for method in methods:
+            setattr(classe, method.__name__, method)
 
 
 def save(self, data=None):
@@ -113,10 +117,10 @@ def list(classe, filter=None):
 
     return classe.objects.filter(**filter).all()
 
-def send_mail(subject='', body='', from_email=None, to=None, bcc=None,
-                  connection=None, attachments=None, headers=None, cc=None,
-                  reply_to=None, html=True):
 
+def send_mail(subject='', body='', from_email=None, to=None, bcc=None,
+              connection=None, attachments=None, headers=None, cc=None,
+              reply_to=None, html=True):
     if not isinstance(to, (list, tuple)):
         email_to = [to]
 
@@ -132,7 +136,16 @@ def send_mail(subject='', body='', from_email=None, to=None, bcc=None,
         raise Exception(e)
 
 
-def processa_django_request(request, action):
+def processa_django_request(request):
+
+    path = request.path.split('/')
+    action = path[1]
+    action = urls.get(action, None)
+
+    if not action:
+        action = get_service_info
+
+
     # PROCESSA OS PARAMETROS
     params = []
     logger = logging.getLogger(__name__)
