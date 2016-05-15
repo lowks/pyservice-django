@@ -1,0 +1,8 @@
+setup.py
+pyservice_django/__init__.py
+pyservice_django/pyservice_django.py
+pyservice_django.egg-info/PKG-INFO
+pyservice_django.egg-info/SOURCES.txt
+pyservice_django.egg-info/dependency_links.txt
+pyservice_django.egg-info/requires.txt
+pyservice_django.egg-info/top_level.txt

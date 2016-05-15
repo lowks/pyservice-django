@@ -21,8 +21,11 @@ service_version = '1.0'
 
 services = {}
 
-def add_route(self, url, method):
+def add_route(url, method):
     urls[url] = method
+
+def add_route_service(url, service, uri):
+    urls[url] = {'service' : service, 'uri' : uri}
 
 def add_service(service_name, url):
     services[service_name] = url
@@ -39,7 +42,7 @@ def POST(service_name, action, params):
     pass
 
 
-def config_classes(self, classes=[], methods=[]):
+def config_classes(classes=[], methods=[]):
     """
     This method injects basic functions for djgando model or others functions passed by params
     :param self:

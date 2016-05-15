@@ -2,9 +2,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='pyservice-django',
-    version='1.1.14',
-    url='https://github.com/bittecnologia/pyservice-django',
+    name='pyservice_django',
+    version='1.1.19',
+    url='https://github.com/bittecnologia/pyservice_django',
     author='Rodrigo Rodrigues',
     author_email='rodrigorodriguescosta@gmail.com',
     license='MIT',
