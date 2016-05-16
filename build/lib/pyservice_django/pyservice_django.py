@@ -39,8 +39,77 @@ def get_service_info(self):
 
 
 def POST(service_name, action, params):
-    pass
+    request = Request(action, urlencode(params).encode())
+    return urlopen(request).read().decode()
 
+
+
+def processa_django_request(request):
+
+    # Get the service requested
+    action = request.path
+    action = urls.get(action, None)
+
+    # PROCESSA OS PARAMETROS
+    params = []
+    logger = logging.getLogger(__name__)
+
+    if request.method == 'POST':
+        params = request.body.decode()
+        params = Serializer.json_to_object(params)
+
+    if params != None and not len(params):
+        params = []
+
+    if not isinstance(params, list):
+        params = [params]
+
+
+
+    # Retorno
+    result = {"result": "OK",
+              "data": ""}
+    try:
+        if not action:
+            result = get_service_info
+        elif isinstance(action, dict): # LOCAL SERVICES OR REMOTE SERVICES
+            service_call = action['service']
+            uri_call = action['uri']
+            result = POST(action[service_call], action[uri_call], params)
+        else:
+            result['data'] = action(*params)
+
+        result = Serializer.object_to_json(result)
+    except Exception as e:
+        result['result'] = 'ERRO'
+        result['data'] = {}
+        if not hasattr(e, 'code'):
+            e.code = ''
+
+        if not hasattr(e, 'message'):
+            e.message = str(e)
+
+        message_detail2 = ''
+        if hasattr(e, 'message_detail'):
+            message_detail2 = e.message_detail2
+
+        if 'positional arguments but' in e.message \
+                or 'must be a sequence, not NoneType' in e.message \
+                or 'positional argument' in e.message:
+            e.message = 'Number of parameters incorrect'
+
+        result['data']['code'] = e.code
+        result['data']['message'] = e.message
+        # message_detail = format_exception(e)
+        # result['data']['message_detail'] = message_detail
+        result['data']['message_detail2'] = message_detail2
+        logger.error(e.message)
+    finally:
+        response = HttpResponse()
+        response.status_code = 200
+        response.write(result)
+
+        return response
 
 def config_classes(classes=[], methods=[]):
     """
@@ -112,7 +181,7 @@ def toDjangoFilter(self, filter):
     return query
 
 
-def list(classe, filter=None):
+def query(classe, filter=None):
     if filter:
         if isinstance(filter, dict):
             return toDjangoFilter(filter)
@@ -138,74 +207,6 @@ def send_mail(subject='', body='', from_email=None, to=None, bcc=None,
     except Exception as e:
         raise Exception(e)
 
-
-def processa_django_request(request):
-
-    path = request.path.split('/')
-    action = path[1]
-    action = urls.get(action, None)
-
-    if not action:
-        action = get_service_info
-
-
-    # PROCESSA OS PARAMETROS
-    params = []
-    logger = logging.getLogger(__name__)
-
-    if request.method == 'POST':
-        params = request.body.decode()
-        params = Serializer.json_to_object(params)
-
-    if params != None and not len(params):
-        params = []
-
-    if not isinstance(params, list):
-        params = [params]
-
-    # Retorno
-    result = {"result": "OK",
-              "data": ""}
-    try:
-
-        # if the action is an str which it means that need to make post request
-        if isinstance(action, str):
-            request = Request(action, urlencode(params).encode())
-            result['data'] = urlopen(request).read().decode()
-        else:
-            result['data'] = action(*params)
-            result = Serializer.object_to_json(result)
-
-        response = HttpResponse()
-        response.status_code = 200
-        response.write(result)
-
-        return response
-    except Exception as e:
-        result['result'] = 'ERRO'
-        result['data'] = {}
-        if not hasattr(e, 'code'):
-            e.code = ''
-
-        if not hasattr(e, 'message'):
-            e.message = str(e)
-
-        message_detail2 = ''
-        if hasattr(e, 'message_detail'):
-            message_detail2 = e.message_detail2
-
-        if 'positional arguments but' in e.message \
-                or 'must be a sequence, not NoneType' in e.message \
-                or 'positional argument' in e.message:
-            e.message = 'Number of parameters incorrect'
-
-        result['data']['code'] = e.code
-        result['data']['message'] = e.message
-        # message_detail = format_exception(e)
-        # result['data']['message_detail'] = message_detail
-        result['data']['message_detail2'] = message_detail2
-        logger.error(e.message)
-        return result
 
 
 def del_none(d):
