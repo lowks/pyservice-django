@@ -1,8 +1,8 @@
 Metadata-Version: 1.1
 Name: pyservice-django
-Version: 1.1.23
+Version: 1.1.30
 Summary: UNKNOWN
-Home-page: https://github.com/bittecnologia/pyservice_django
+Home-page: https://github.com/rodrigorodriguescosta/pyservice_django
 Author: Rodrigo Rodrigues
 Author-email: rodrigorodriguescosta@gmail.com
 License: MIT
