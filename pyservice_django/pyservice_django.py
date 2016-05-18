@@ -36,20 +36,23 @@ def get_service_info():
     }
 
 
-def POST(service_name, action, params):
+def post_service(service_name, action, params):
     # from urllib.parse import urlencode
     # from urllib.request import Request, urlopen
     # request = Request(action, urlencode(params).encode())
     # return urlopen(request).read().decode()
 
-    import requests
+
     url = services[service_name]
     url += action
-    result = requests.post(url, params)
+    return post(url, params)
+
+def post(url, params):
+    import requests
+    headers = {'content-type': 'application/json'}
+    result = requests.post(url, data=json.dumps(params), headers=headers)
+    result = toObj(result.text)
     return result
-
-
-
 
 def processa_django_request(request):
 
@@ -82,7 +85,7 @@ def processa_django_request(request):
         elif isinstance(action, dict): # LOCAL SERVICES OR REMOTE SERVICES
             service_call = action['service']
             uri_call = action['uri']
-            result = POST(service_call, uri_call, params)
+            result = post_service(service_call, uri_call, params)
         else:
             result['data'] = action(*params)
 

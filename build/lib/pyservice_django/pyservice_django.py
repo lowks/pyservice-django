@@ -5,8 +5,6 @@ from datetime import date
 from decimal import Decimal
 
 import copy
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
 
 from django.core import mail
 from django.core.exceptions import ValidationError
@@ -30,19 +28,31 @@ def add_route_service(url, service, uri):
 def add_service(service_name, url):
     services[service_name] = url
 
-def get_service_info(self):
+def get_service_info():
     return {
-        'Service Name': self.service_name,
-        'Description': self.service_description,
-        'Version': self.service_version,
+        'Service Name': service_name,
+        'Description': service_description,
+        'Version': service_version,
     }
 
 
-def POST(service_name, action, params):
-    request = Request(action, urlencode(params).encode())
-    return urlopen(request).read().decode()
+def post_service(service_name, action, params):
+    # from urllib.parse import urlencode
+    # from urllib.request import Request, urlopen
+    # request = Request(action, urlencode(params).encode())
+    # return urlopen(request).read().decode()
 
 
+    url = services[service_name]
+    url += action
+    return post(url, params)
+
+def post(url, params):
+    import requests
+    headers = {'content-type': 'application/json'}
+    result = requests.post(url, data=json.dumps(params), headers=headers)
+    result = toObj(result.text)
+    return result
 
 def processa_django_request(request):
 
@@ -71,11 +81,11 @@ def processa_django_request(request):
               "data": ""}
     try:
         if not action:
-            result = get_service_info
+            result = get_service_info()
         elif isinstance(action, dict): # LOCAL SERVICES OR REMOTE SERVICES
             service_call = action['service']
             uri_call = action['uri']
-            result = POST(action[service_call], action[uri_call], params)
+            result = post_service(service_call, uri_call, params)
         else:
             result['data'] = action(*params)
 
