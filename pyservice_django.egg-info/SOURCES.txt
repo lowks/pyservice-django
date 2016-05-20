@@ -6,3 +6,8 @@ pyservice_django.egg-info/SOURCES.txt
 pyservice_django.egg-info/dependency_links.txt
 pyservice_django.egg-info/requires.txt
 pyservice_django.egg-info/top_level.txt
+tests/__init__.py
+tests/i18n_pt_br.py
+tests/test_pyservice_django.py
+tests/i18n/__init__.py
+tests/i18n/i18n_pt_br.py

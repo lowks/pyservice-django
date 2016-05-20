@@ -20,14 +20,18 @@ service_version = '1.0'
 
 services = {}
 
+
 def add_route(url, method):
     urls[url] = method
 
+
 def add_route_service(url, service, uri):
-    urls[url] = {'service' : service, 'uri' : uri}
+    urls[url] = {'service': service, 'uri': uri}
+
 
 def add_service(service_name, url):
     services[service_name] = url
+
 
 def get_service_info():
     return {
@@ -48,6 +52,7 @@ def post_service(service_name, action, params):
     url += action
     return post(url, params)
 
+
 def post(url, params):
     import requests
     headers = {'content-type': 'application/json'}
@@ -55,8 +60,8 @@ def post(url, params):
     result = toObj(result.text)
     return result
 
-def processa_django_request(request):
 
+def processa_django_request(request):
     # Get the service requested
     action = request.path
     action = urls.get(action, None)
@@ -75,15 +80,13 @@ def processa_django_request(request):
     if not isinstance(params, list):
         params = [params]
 
-
-
     # Retorno
     result = {"result": "OK",
               "data": ""}
     try:
         if not action:
             result = get_service_info()
-        elif isinstance(action, dict): # LOCAL SERVICES OR REMOTE SERVICES
+        elif isinstance(action, dict):  # LOCAL SERVICES OR REMOTE SERVICES
             service_call = action['service']
             uri_call = action['uri']
             result = post_service(service_call, uri_call, params)
@@ -122,12 +125,33 @@ def processa_django_request(request):
 
         return response
 
+
 def i18n(self, code, params=[]):
-    modulo = importlib.import_module('i18n.i18n_pt_br.py')
-    mensagem = modulo[code]
-    mensagem = mensagem.format(params)
+    modulo = self.__module__[:self.__module__.rfind('.')]
+    modulo = '{0}.i18n.i18n_pt_br'.format(modulo)
+    modulo = importlib.import_module(modulo)
+    mensagem = getattr(modulo, code)
+    if params:
+        mensagem = mensagem.format(*params)
     return mensagem
 
+
+def send_mail(self, subject='', body='', from_email=None, to=None, bcc=None,
+              connection=None, attachments=None, headers=None, cc=None,
+              reply_to=None, html=True):
+    if not isinstance(to, (list, tuple)):
+        email_to = [to]
+
+    conn = mail.get_connection()
+    msg = mail.EmailMessage(subject, body, from_email, to,
+                            connection=conn)
+    if html:
+        msg.content_subtype = "html"
+
+    try:
+        msg.send()
+    except Exception as e:
+        raise Exception(e)
 
 
 def config_classes(classes=[], methods=[]):
@@ -139,7 +163,7 @@ def config_classes(classes=[], methods=[]):
     :return:
     """
     if not methods:
-        methods = [save, delete, list, i18n]
+        methods = [save, delete, list, i18n, send_mail]
 
     for classe in classes:
         for method in methods:
@@ -207,24 +231,6 @@ def query(classe, filter=None):
             # return self.__class__.objects.filter(**filter).all()
 
     return classe.objects.filter(**filter).all()
-
-
-def send_mail(subject='', body='', from_email=None, to=None, bcc=None,
-              connection=None, attachments=None, headers=None, cc=None,
-              reply_to=None, html=True):
-    if not isinstance(to, (list, tuple)):
-        email_to = [to]
-
-    conn = mail.get_connection()
-    msg = mail.EmailMessage(subject, body, from_email, to,
-                            connection=conn)
-    if html:
-        msg.content_subtype = "html"
-
-    try:
-        msg.send()
-    except Exception as e:
-        raise Exception(e)
 
 
 
