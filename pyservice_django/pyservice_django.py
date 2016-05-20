@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
+import importlib
 
 urls = {}
 service_name = 'Service Sample'
@@ -120,6 +121,14 @@ def processa_django_request(request):
         response.write(result)
 
         return response
+
+def i18n(self, code, params=[]):
+    modulo = importlib.import_module('i18n.i18n_pt_br.py')
+    mensagem = modulo[code]
+    mensagem = mensagem.format(params)
+    return mensagem
+
+
 
 def config_classes(classes=[], methods=[]):
     """

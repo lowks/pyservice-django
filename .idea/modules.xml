@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/pyservice-django.iml" filepath="$PROJECT_DIR$/.idea/pyservice-django.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/pyservice-django.iml" filepath="$PROJECT_DIR$/.idea/pyservice-django.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/pyservice_django.iml" filepath="$PROJECT_DIR$/.idea/pyservice_django.iml" />
     </modules>
   </component>
