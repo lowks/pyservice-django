@@ -139,7 +139,7 @@ def config_classes(classes=[], methods=[]):
     :return:
     """
     if not methods:
-        methods = [save, delete, list]
+        methods = [save, delete, list, i18n]
 
     for classe in classes:
         for method in methods:
