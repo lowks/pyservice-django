@@ -8,6 +8,7 @@ import copy
 
 from django.core import mail
 from django.core.exceptions import ValidationError
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.db.models.query import QuerySet
 from django.http.response import HttpResponse
@@ -41,7 +42,7 @@ def get_service_info():
     }
 
 
-def post_service(service_name, action, params):
+def post_service(self, service_name, action, params=[]):
     # from urllib.parse import urlencode
     # from urllib.request import Request, urlopen
     # request = Request(action, urlencode(params).encode())
@@ -89,7 +90,7 @@ def processa_django_request(request):
         elif isinstance(action, dict):  # LOCAL SERVICES OR REMOTE SERVICES
             service_call = action['service']
             uri_call = action['uri']
-            result = post_service(service_call, uri_call, params)
+            result = post_service(None, service_call, uri_call, params)
         else:
             result['data'] = action(*params)
 
@@ -139,19 +140,36 @@ def i18n(self, code, params=[]):
 def send_mail(self, subject='', body='', from_email=None, to=None, bcc=None,
               connection=None, attachments=None, headers=None, cc=None,
               reply_to=None, html=True):
+
     if not isinstance(to, (list, tuple)):
-        email_to = [to]
+        to = [to]
 
-    conn = mail.get_connection()
-    msg = mail.EmailMessage(subject, body, from_email, to,
-                            connection=conn)
-    if html:
-        msg.content_subtype = "html"
-
+    mail = EmailMultiAlternatives(
+        subject=subject,
+        # body="This is a simple text email body.",
+         from_email=from_email,  # "Yamil Asusta <hello@yamilasusta.com>",
+        to=to,
+        # headers={"Reply-To": "support@sendgrid.com"}
+    )
+    mail.attach_alternative(body, "text/html")
     try:
-        msg.send()
+        mail.send()
     except Exception as e:
         raise Exception(e)
+
+    # if not isinstance(to, (list, tuple)):
+    #     email_to = [to]
+    #
+    # conn = mail.get_connection()
+    # msg = mail.EmailMessage(subject, body, from_email, to,
+    #                         connection=conn)
+    # if html:
+    #     msg.content_subtype = "text/html"
+    #
+    # try:
+    #     msg.send()
+    # except Exception as e:
+    #     raise Exception(e)
 
 
 def config_classes(classes=[], methods=[]):
@@ -163,7 +181,7 @@ def config_classes(classes=[], methods=[]):
     :return:
     """
     if not methods:
-        methods = [save, delete, list, i18n, send_mail]
+        methods = [save, delete, list, i18n, send_mail, post_service]
 
     for classe in classes:
         for method in methods:
@@ -233,6 +251,67 @@ def query(classe, filter=None):
     return classe.objects.filter(**filter).all()
 
 
+def model(self):
+    """
+    Function that gets all informations about the fields about the models
+    :param self:
+    :return:
+    """
+    model = {}
+    fields_cadastro = []
+    fields_consulta = []
+    actions = []
+    model['fields_find'] = []
+
+    # if self.model_campos_consulta_padrao:
+    #     model['fields_find'] = self.model_campos_consulta_padrao()
+
+    model['servicename'] = self.__class__.__name__.lower()
+
+    #
+    model['help'] = self.url + '/help'
+
+    # Services
+    if self.PUBLIC_ACTIONS:
+        for s in self.PUBLIC_ACTIONS:
+            actions.append(s)
+
+    if self.PRIVATE_ACTIONS:
+        for s in self.PRIVATE_ACTIONS:
+            actions.append(s)
+
+    ########### Fields cadastro  ######################
+    FIELDS_CADASTRO = list(filter(lambda x: x[0] == 'cadastro', self.FIELDS))
+    for fieldname in FIELDS_CADASTRO:
+        field = {
+            'tipo': fieldname[0],
+            'name': fieldname[1],
+            'caption': fieldname[2],
+            'mostrar': fieldname[3]
+        }
+        self.get_model(self.__class__, field, fields_cadastro)
+    #########################################################################
+
+
+
+    ########### Fields consulta ######################
+    FIELDS_CONSULTA = list(filter(lambda x: x[0] == 'consulta', self.FIELDS))
+    for fieldname in FIELDS_CONSULTA:
+        field = {
+            'tipo': fieldname[0],
+            'name': fieldname[1],
+            'caption': fieldname[2],
+            'mostrar': fieldname[3]
+        }
+        self.get_model(self.__class__, field, fields_consulta)
+    #################################################
+
+
+    model['fields_cadastro'] = fields_cadastro
+    model['fields_consulta'] = fields_consulta
+
+    model['actions'] = actions
+    return model
 
 def del_none(d):
     if isinstance(d, dict):

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyservice_django',
-    version='1.1.40',
+    version='1.1.42',
     url='https://github.com/rodrigorodriguescosta/pyservice_django',
     author='Rodrigo Rodrigues',
     author_email='rodrigorodriguescosta@gmail.com',

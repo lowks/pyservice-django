@@ -27,3 +27,7 @@ def test_config_classes__i18n():
 
     mensagem = teste.teste2()
     assert mensagem == 'Confirmação de registro'
+
+
+def test_send_email():
+    pass
